@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>TIB Training Administration</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#172033;background:#f5f7fb}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}.hidden{display:none!important}.shell{min-height:100vh}.topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;background:#111827;color:#fff;box-shadow:0 1px 8px #0002}.brand{display:flex;gap:12px;align-items:center}.logo{width:42px;height:42px;border-radius:10px;background:#fff;color:#111827;display:grid;place-items:center;font-weight:800}.brand h1{font-size:18px;margin:0}.brand small{display:block;color:#cbd5e1}.top-actions{display:flex;gap:10px;align-items:center}.container{max-width:1450px;margin:0 auto;padding:24px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;box-shadow:0 2px 12px #0f172a0d}.login-wrap{min-height:100vh;display:grid;place-items:center;padding:24px}.login-card{width:min(470px,100%);padding:28px}.login-card h2{margin:0 0 6px}.muted{color:#64748b}.field{display:flex;flex-direction:column;gap:6px;margin:14px 0}.field label{font-size:13px;font-weight:650;color:#475569}.field input,.field textarea{width:100%;padding:11px 12px;border:1px solid #cbd5e1;border-radius:9px;background:#fff}.btn{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:pointer}.btn-primary{background:#111827;color:#fff}.btn-secondary{background:#e2e8f0;color:#0f172a}.btn-danger{background:#b91c1c;color:#fff}.btn-success{background:#047857;color:#fff}.btn-outline{background:#fff;color:#111827;border:1px solid #cbd5e1}.btn:disabled{opacity:.5;cursor:not-allowed}.grid{display:grid;grid-template-columns:minmax(340px,1.05fr) minmax(520px,1.7fr);gap:20px}.pane{min-height:680px}.pane-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px;border-bottom:1px solid #e5e7eb}.pane-body{padding:18px}.search{display:flex;gap:8px}.search input{flex:1;padding:10px 12px;border:1px solid #cbd5e1;border-radius:9px}.user-list{display:flex;flex-direction:column;gap:8px;max-height:610px;overflow:auto}.user-row{padding:12px;border:1px solid #e5e7eb;border-radius:10px;cursor:pointer}.user-row:hover,.user-row.active{border-color:#64748b;background:#f8fafc}.user-row strong{display:block}.user-row small{color:#64748b}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}.stat{padding:16px}.stat .n{font-size:26px;font-weight:800}.stat .label{font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:.04em}.section-title{margin:0 0 12px;font-size:16px}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.courses{display:grid;gap:10px}.course{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;padding:12px;border:1px solid #e5e7eb;border-radius:10px}.course.active{border-color:#86efac;background:#f0fdf4}.course .meta{font-size:12px;color:#64748b}.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:700}.badge-ok{background:#dcfce7;color:#166534}.badge-off{background:#fee2e2;color:#991b1b}.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.notice{padding:11px 12px;border-radius:9px;margin:10px 0;font-size:13px}.notice-ok{background:#ecfdf5;color:#065f46}.notice-err{background:#fef2f2;color:#991b1b}.notice-info{background:#eff6ff;color:#1e40af}.empty{padding:32px;text-align:center;color:#64748b}.modal-backdrop{position:fixed;inset:0;background:#0f172a88;display:grid;place-items:center;padding:20px;z-index:10}.modal{width:min(620px,100%);background:#fff;border-radius:14px;box-shadow:0 20px 70px #0005}.modal-header{padding:18px;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center}.modal-body{padding:18px}.modal-footer{padding:16px 18px;border-top:1px solid #e5e7eb;display:flex;justify-content:flex-end;gap:8px}.checkbox-line{display:flex;align-items:flex-start;gap:10px;padding:10px 0}.footer-note{margin-top:18px;font-size:12px;color:#64748b}@media(max-width:950px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.pane{min-height:auto}.user-list{max-height:360px}}@media(max-width:560px){.container{padding:14px}.topbar{padding:14px}.brand small{display:none}.stats{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}.pane-header{align-items:flex-start;flex-direction:column}.search{width:100%}}
+</style>
+</head>
+<body>
+<div id="loginView" class="login-wrap">
+  <div class="card login-card">
+    <div class="brand" style="color:#111827;margin-bottom:20px"><div class="logo" style="background:#111827;color:#fff">TIB</div><div><h1>TIB Training Administration</h1><small class="muted">Administrator Portal</small></div></div>
+    <h2>Administrator sign in</h2>
+    <p class="muted">Use an authorized TIB staff account.</p>
+    <div id="loginMsg"></div>
+    <div class="field"><label>Email</label><input id="loginEmail" type="email" autocomplete="username" /></div>
+    <div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" /></div>
+    <button id="loginBtn" class="btn btn-primary" style="width:100%">Sign In</button>
+  </div>
+</div>
+
+<div id="appView" class="shell hidden">
+  <div class="topbar"><div class="brand"><div class="logo">TIB</div><div><h1>TIB Training Administration</h1><small>Training Assistant Enrollment & Access</small></div></div><div class="top-actions"><span id="adminIdentity" style="font-size:13px;color:#cbd5e1"></span><button id="logoutBtn" class="btn btn-outline">Logout</button></div></div>
+  <main class="container">
+    <div id="appMsg"></div>
+    <div class="stats">
+      <div class="card stat"><div id="statUsers" class="n">0</div><div class="label">Users</div></div>
+      <div class="card stat"><div id="statEnrollments" class="n">0</div><div class="label">Enrollments</div></div>
+      <div class="card stat"><div id="statActive" class="n">0</div><div class="label">Active Access</div></div>
+      <div class="card stat"><div id="statCourses" class="n">4</div><div class="label">Courses</div></div>
+    </div>
+
+    <div class="grid">
+      <section class="card pane">
+        <div class="pane-header"><div><strong>Trainees / Users</strong><div class="muted" style="font-size:12px">Select a user to manage access.</div></div><button id="addUserBtn" class="btn btn-primary">+ Add Trainee</button></div>
+        <div class="pane-body">
+          <div class="search"><input id="searchInput" placeholder="Search name or email"/><button id="searchBtn" class="btn btn-secondary">Search</button><button id="refreshBtn" class="btn btn-outline">Refresh</button></div>
+          <div id="userList" class="user-list" style="margin-top:14px"></div>
+        </div>
+      </section>
+
+      <section class="card pane">
+        <div class="pane-header"><div><strong>Enrollment Details</strong><div id="selectedSummary" class="muted" style="font-size:12px">Select a trainee.</div></div></div>
+        <div id="detailsPane" class="pane-body"><div class="empty">Choose a trainee from the left.</div></div>
+      </section>
+    </div>
+    <div class="footer-note">Trainees can read only their own active entitlements. Course assignment and access changes are admin-controlled and audited.</div>
+  </main>
+</div>
+
+<div id="addModal" class="modal-backdrop hidden">
+  <div class="modal">
+    <div class="modal-header"><strong>Add / Invite Trainee</strong><button id="closeModal" class="btn btn-outline">×</button></div>
+    <div class="modal-body">
+      <div id="modalMsg"></div>
+      <div class="two"><div class="field"><label>Full Name</label><input id="newName"/></div><div class="field"><label>Email</label><input id="newEmail" type="email"/></div></div>
+      <div class="two"><div class="field"><label>Start Date</label><input id="newStart" type="date"/></div><div class="field"><label>Expiry Date (optional)</label><input id="newExpiry" type="date"/></div></div>
+      <div class="field"><label>Enroll in courses</label><div id="newCourses"></div></div>
+    </div>
+    <div class="modal-footer"><button id="cancelModal" class="btn btn-outline">Cancel</button><button id="inviteBtn" class="btn btn-primary">Invite & Enroll</button></div>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const SUPABASE_URL='https://blfgwysgekfqhcafofhe.supabase.co';
+const SUPABASE_KEY='sb_publishable_ThLetpd4hj49fjce-kXoFA_v4ghwIqV';
+const sb=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+
+const COURSE_LABELS={
+  'TIB-SECURITY':'SAP & Enterprise Applications Security Specialist',
+  'TIB-JOB-READINESS':'SAP Controls, GRC & Security Assurance — 8-Week Job-Readiness',
+  'TIB-FULL-SWEEP':'The SAP Controls Consultant — The Full Sweep',
+  'TIB-THORNFIELD':'Thornfield Unified Execution Course'
+};
+let state={users:[],courses:[],enrollments:[],selected:null,admin:null};
+const $=id=>document.getElementById(id);
+const today=()=>new Date().toISOString().slice(0,10);
+function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function msg(el,text,type='info'){el.innerHTML=text?`<div class="notice notice-${type}">${esc(text)}</div>`:''}
+function busy(btn,on,label){if(on){btn.dataset.old=btn.textContent;btn.textContent=label||'Working…';btn.disabled=true}else{btn.textContent=btn.dataset.old||btn.textContent;btn.disabled=false}}
+
+async function invoke(body){
+  const {data,error}=await sb.functions.invoke('training-assistant-admin',{body});
+  if(error){let m=error.message;try{if(error.context){const j=await error.context.json();m=j.error||m}}catch{} throw new Error(m)}
+  if(!data?.success) throw new Error(data?.error||'Request failed');
+  return data;
+}
+
+async function login(){
+  const b=$('loginBtn');busy(b,true,'Signing in…');msg($('loginMsg'),'');
+  try{
+    const {error}=await sb.auth.signInWithPassword({email:$('loginEmail').value.trim(),password:$('loginPassword').value});
+    if(error) throw error;
+    await boot();
+  }catch(e){msg($('loginMsg'),e.message,'err')}finally{busy(b,false)}
+}
+
+async function boot(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){$('loginView').classList.remove('hidden');$('appView').classList.add('hidden');return}
+  try{
+    const d=await invoke({action:'dashboard'});
+    state={...state,...d};
+    $('loginView').classList.add('hidden');$('appView').classList.remove('hidden');
+    $('adminIdentity').textContent=`${d.admin.email} (${d.admin.role||'staff'})`;
+    render();
+  }catch(e){await sb.auth.signOut();msg($('loginMsg'),e.message,'err');$('loginView').classList.remove('hidden');$('appView').classList.add('hidden')}
+}
+
+async function refresh(search=''){
+  msg($('appMsg'),'');
+  try{const d=await invoke({action:'dashboard',search});state={...state,...d};render()}catch(e){msg($('appMsg'),e.message,'err')}
+}
+
+function render(){
+  $('statUsers').textContent=state.users.length;
+  $('statEnrollments').textContent=state.enrollments.length;
+  $('statActive').textContent=state.enrollments.filter(e=>e.is_active).length;
+  $('statCourses').textContent=state.courses.length||4;
+  const list=$('userList');
+  list.innerHTML=state.users.length?state.users.map(u=>{
+    const n=state.enrollments.filter(e=>e.user_id===u.id&&e.is_active).length;
+    return `<div class="user-row ${state.selected?.id===u.id?'active':''}" data-id="${u.id}"><strong>${esc(u.full_name||u.email)}</strong><small>${esc(u.email)} · ${n} active course${n===1?'':'s'}</small></div>`
+  }).join(''):'<div class="empty">No users found.</div>';
+  list.querySelectorAll('.user-row').forEach(el=>el.onclick=()=>selectUser(el.dataset.id));
+  if(state.selected){const fresh=state.users.find(u=>u.id===state.selected.id);if(fresh){state.selected=fresh;renderDetails()}}
+}
+
+function selectUser(id){state.selected=state.users.find(u=>u.id===id)||null;render();renderDetails()}
+
+function renderDetails(){
+  const u=state.selected;if(!u){$('detailsPane').innerHTML='<div class="empty">Choose a trainee from the left.</div>';return}
+  $('selectedSummary').textContent=`${u.full_name||u.email} · ${u.email}`;
+  const byCourse=new Map(state.enrollments.filter(e=>e.user_id===u.id).map(e=>[e.course,e]));
+  $('detailsPane').innerHTML=`
+    <div class="two"><div><h3 class="section-title">Trainee</h3><div><strong>${esc(u.full_name||'—')}</strong></div><div class="muted">${esc(u.email)}</div></div><div><h3 class="section-title">Account</h3><div class="muted">Last sign in: ${esc(u.last_sign_in_at?new Date(u.last_sign_in_at).toLocaleString():'Never')}</div><div class="muted">Created: ${esc(new Date(u.created_at).toLocaleDateString())}</div></div></div>
+    <hr style="border:0;border-top:1px solid #e5e7eb;margin:18px 0">
+    <h3 class="section-title">Course Access</h3>
+    <div class="courses">${state.courses.map(c=>{
+      const e=byCourse.get(c.course_code);const active=!!e?.is_active;
+      return `<div class="course ${active?'active':''}" data-course="${c.course_code}">
+        <input type="checkbox" class="course-check" ${active?'checked':''}>
+        <div><strong>${esc(c.display_name||COURSE_LABELS[c.course_code]||c.course_code)}</strong><div class="meta">${e?`Start ${esc(e.start_date)} · ${e.expiry_date?`Expires ${esc(e.expiry_date)}`:'No expiry'}`:'Not enrolled'}</div></div>
+        <span class="badge ${active?'badge-ok':'badge-off'}">${active?'ACTIVE':'NO ACCESS'}</span>
+      </div>`}).join('')}</div>
+    <div class="two" style="margin-top:14px"><div class="field"><label>Start Date</label><input id="editStart" type="date" value="${today()}"></div><div class="field"><label>Expiry Date (optional)</label><input id="editExpiry" type="date"></div></div>
+    <div class="field"><label>Admin Notes</label><textarea id="editNotes" rows="2" placeholder="Optional enrollment note"></textarea></div>
+    <div class="toolbar"><button id="saveAccessBtn" class="btn btn-success">Save Course Access</button><button id="resetBtn" class="btn btn-secondary">Send Password Reset</button><button id="disableAllBtn" class="btn btn-danger">Deactivate All Courses</button></div>
+  `;
+  $('saveAccessBtn').onclick=saveAccess;$('resetBtn').onclick=sendReset;$('disableAllBtn').onclick=disableAll;
+}
+
+async function saveAccess(){
+  const u=state.selected;if(!u)return;const b=$('saveAccessBtn');busy(b,true,'Saving…');msg($('appMsg'),'');
+  try{
+    const start=$('editStart').value||today(), expiry=$('editExpiry').value||null, notes=$('editNotes').value||null;
+    const desired=new Map([...document.querySelectorAll('.course')].map(row=>[row.dataset.course,row.querySelector('.course-check').checked]));
+    const existing=new Map(state.enrollments.filter(e=>e.user_id===u.id).map(e=>[e.course,e]));
+    for(const c of state.courses){
+      const want=desired.get(c.course_code), e=existing.get(c.course_code);
+      if(want){await invoke({action:'upsert_enrollment',user_id:u.id,course_code:c.course_code,start_date:start,expiry_date:expiry,is_active:true,notes});}
+      else if(e?.is_active){await invoke({action:'set_enrollment_active',enrollment_id:e.id,is_active:false});}
+    }
+    msg($('appMsg'),'Enrollment access updated.','ok');await refresh($('searchInput').value.trim());selectUser(u.id);
+  }catch(e){msg($('appMsg'),e.message,'err')}finally{busy(b,false)}
+}
+
+async function sendReset(){const u=state.selected;if(!u)return;const b=$('resetBtn');busy(b,true,'Sending…');try{await invoke({action:'send_password_reset',email:u.email});msg($('appMsg'),`Password reset sent to ${u.email}.`,'ok')}catch(e){msg($('appMsg'),e.message,'err')}finally{busy(b,false)}}
+async function disableAll(){const u=state.selected;if(!u||!confirm(`Deactivate all Training Assistant course access for ${u.email}?`))return;const b=$('disableAllBtn');busy(b,true,'Deactivating…');try{for(const e of state.enrollments.filter(e=>e.user_id===u.id&&e.is_active)){await invoke({action:'set_enrollment_active',enrollment_id:e.id,is_active:false})}msg($('appMsg'),'All Training Assistant course access deactivated.','ok');await refresh();selectUser(u.id)}catch(e){msg($('appMsg'),e.message,'err')}finally{busy(b,false)}}
+
+function openAdd(){
+  $('newName').value='';$('newEmail').value='';$('newStart').value=today();$('newExpiry').value='';msg($('modalMsg'),'');
+  $('newCourses').innerHTML=state.courses.map(c=>`<label class="checkbox-line"><input type="checkbox" value="${c.course_code}"><span><strong>${esc(c.display_name)}</strong><div class="muted" style="font-size:12px">${esc(c.course_code)}</div></span></label>`).join('');
+  $('addModal').classList.remove('hidden')
+}
+function closeAdd(){$('addModal').classList.add('hidden')}
+async function inviteAndEnroll(){
+  const b=$('inviteBtn');busy(b,true,'Inviting…');msg($('modalMsg'),'');
+  try{
+    const email=$('newEmail').value.trim(),full_name=$('newName').value.trim();if(!email)throw new Error('Email is required');
+    const chosen=[...$('newCourses').querySelectorAll('input:checked')].map(x=>x.value);
+    const d=await invoke({action:'invite_user',email,full_name});
+    for(const code of chosen){await invoke({action:'upsert_enrollment',user_id:d.user_id,course_code:code,start_date:$('newStart').value||today(),expiry_date:$('newExpiry').value||null,is_active:true,notes:'Created from TIB Training Administration portal'})}
+    closeAdd();msg($('appMsg'),d.existing?'Existing account updated and enrollment saved.':'Invitation sent and enrollment saved.','ok');await refresh(email);
+  }catch(e){msg($('modalMsg'),e.message,'err')}finally{busy(b,false)}
+}
+
+$('loginBtn').onclick=login;$('loginPassword').addEventListener('keydown',e=>{if(e.key==='Enter')login()});
+$('logoutBtn').onclick=async()=>{await sb.auth.signOut();state.selected=null;$('appView').classList.add('hidden');$('loginView').classList.remove('hidden')};
+$('addUserBtn').onclick=openAdd;$('closeModal').onclick=closeAdd;$('cancelModal').onclick=closeAdd;$('inviteBtn').onclick=inviteAndEnroll;
+$('searchBtn').onclick=()=>refresh($('searchInput').value.trim());$('refreshBtn').onclick=()=>{$('searchInput').value='';refresh()};$('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')refresh(e.target.value.trim())});
+
+boot();
+</script>
+</body>
+</html>
