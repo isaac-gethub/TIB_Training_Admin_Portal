@@ -59,7 +59,7 @@
       <div class="two"><div class="field"><label>Start Date</label><input id="newStart" type="date"/></div><div class="field"><label>Expiry Date (optional)</label><input id="newExpiry" type="date"/></div></div>
       <div class="field"><label>Enroll in courses</label><div id="newCourses"></div></div>
     </div>
-    <div class="modal-footer"><button id="cancelModal" class="btn btn-outline">Cancel</button><button id="inviteBtn" class="btn btn-primary">Invite & Enroll</button></div>
+    <div class="modal-footer"><button id="cancelModal" class="btn btn-outline">Cancel</button><button id="inviteBtn" class="btn btn-primary">Invite, Enroll & Email</button></div>
   </div>
 </div>
 
@@ -149,9 +149,9 @@ function renderDetails(){
       </div>`}).join('')}</div>
     <div class="two" style="margin-top:14px"><div class="field"><label>Start Date</label><input id="editStart" type="date" value="${today()}"></div><div class="field"><label>Expiry Date (optional)</label><input id="editExpiry" type="date"></div></div>
     <div class="field"><label>Admin Notes</label><textarea id="editNotes" rows="2" placeholder="Optional enrollment note"></textarea></div>
-    <div class="toolbar"><button id="saveAccessBtn" class="btn btn-success">Save Course Access</button><button id="resetBtn" class="btn btn-secondary">Send Password Reset</button><button id="disableAllBtn" class="btn btn-danger">Deactivate All Courses</button></div>
+    <div class="toolbar"><button id="saveAccessBtn" class="btn btn-success">Save Course Access & Email</button><button id="emailEnrollBtn" class="btn btn-secondary">Send Enrollment Email</button><button id="resetBtn" class="btn btn-secondary">Send Password Reset</button><button id="disableAllBtn" class="btn btn-danger">Deactivate All Courses</button></div>
   `;
-  $('saveAccessBtn').onclick=saveAccess;$('resetBtn').onclick=sendReset;$('disableAllBtn').onclick=disableAll;
+  $('saveAccessBtn').onclick=saveAccess;$('emailEnrollBtn').onclick=sendEnrollmentEmail;$('resetBtn').onclick=sendReset;$('disableAllBtn').onclick=disableAll;
 }
 
 async function saveAccess(){
@@ -165,10 +165,26 @@ async function saveAccess(){
       if(want){await invoke({action:'upsert_enrollment',user_id:u.id,course_code:c.course_code,start_date:start,expiry_date:expiry,is_active:true,notes});}
       else if(e?.is_active){await invoke({action:'set_enrollment_active',enrollment_id:e.id,is_active:false});}
     }
-    msg($('appMsg'),'Enrollment access updated.','ok');await refresh($('searchInput').value.trim());selectUser(u.id);
+    let resultMsg='Enrollment access updated.';
+    let resultType='ok';
+    const activeCount=[...desired.values()].filter(Boolean).length;
+    if(activeCount>0){
+      try{await invoke({action:'send_enrollment_email',user_id:u.id,new_account:false});resultMsg+=' Enrollment email sent.'}
+      catch(mailErr){resultMsg+=' Enrollment saved, but enrollment email failed: '+mailErr.message;resultType='err'}
+    }
+    msg($('appMsg'),resultMsg,resultType);await refresh($('searchInput').value.trim());selectUser(u.id);
   }catch(e){msg($('appMsg'),e.message,'err')}finally{busy(b,false)}
 }
 
+
+async function sendEnrollmentEmail(){
+  const u=state.selected;if(!u)return;
+  const b=$('emailEnrollBtn');busy(b,true,'Sending…');
+  try{
+    await invoke({action:'send_enrollment_email',user_id:u.id,new_account:false});
+    msg($('appMsg'),`Enrollment email sent to ${u.email}.`,'ok');
+  }catch(e){msg($('appMsg'),e.message,'err')}finally{busy(b,false)}
+}
 async function sendReset(){const u=state.selected;if(!u)return;const b=$('resetBtn');busy(b,true,'Sending…');try{await invoke({action:'send_password_reset',email:u.email});msg($('appMsg'),`Password reset sent to ${u.email}.`,'ok')}catch(e){msg($('appMsg'),e.message,'err')}finally{busy(b,false)}}
 async function disableAll(){const u=state.selected;if(!u||!confirm(`Deactivate all Training Assistant course access for ${u.email}?`))return;const b=$('disableAllBtn');busy(b,true,'Deactivating…');try{for(const e of state.enrollments.filter(e=>e.user_id===u.id&&e.is_active)){await invoke({action:'set_enrollment_active',enrollment_id:e.id,is_active:false})}msg($('appMsg'),'All Training Assistant course access deactivated.','ok');await refresh();selectUser(u.id)}catch(e){msg($('appMsg'),e.message,'err')}finally{busy(b,false)}}
 
@@ -183,9 +199,14 @@ async function inviteAndEnroll(){
   try{
     const email=$('newEmail').value.trim(),full_name=$('newName').value.trim();if(!email)throw new Error('Email is required');
     const chosen=[...$('newCourses').querySelectorAll('input:checked')].map(x=>x.value);
+    if(!chosen.length)throw new Error('Select at least one course.');
     const d=await invoke({action:'invite_user',email,full_name});
     for(const code of chosen){await invoke({action:'upsert_enrollment',user_id:d.user_id,course_code:code,start_date:$('newStart').value||today(),expiry_date:$('newExpiry').value||null,is_active:true,notes:'Created from TIB Training Administration portal'})}
-    closeAdd();msg($('appMsg'),d.existing?'Existing account updated and enrollment saved.':'Invitation sent and enrollment saved.','ok');await refresh(email);
+    let resultMsg=d.existing?'Existing account updated and enrollment saved.':'Invitation sent and enrollment saved.';
+    let resultType='ok';
+    try{await invoke({action:'send_enrollment_email',user_id:d.user_id,new_account:!d.existing});resultMsg+=' Branded TIB enrollment email sent.'}
+    catch(mailErr){resultMsg+=' Enrollment saved, but branded enrollment email failed: '+mailErr.message;resultType='err'}
+    closeAdd();msg($('appMsg'),resultMsg,resultType);await refresh(email);
   }catch(e){msg($('modalMsg'),e.message,'err')}finally{busy(b,false)}
 }
 
